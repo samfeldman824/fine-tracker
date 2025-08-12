@@ -187,3 +187,39 @@ export async function createCredit(creditData: CreateCreditData): Promise<ApiRes
     }
   }
 }
+
+// Real-time subscription utilities
+export function subscribeFinesChanges(callback: (payload: any) => void) {
+  return supabase
+    .channel('fines-changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'fines' }, 
+      callback
+    )
+    .subscribe()
+}
+
+export function subscribeCreditsChanges(callback: (payload: any) => void) {
+  return supabase
+    .channel('credits-changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'credits' }, 
+      callback
+    )
+    .subscribe()
+}
+
+export function subscribeUsersChanges(callback: (payload: any) => void) {
+  return supabase
+    .channel('users-changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'users' }, 
+      callback
+    )
+    .subscribe()
+}
+
+// Utility function to unsubscribe from all channels
+export function unsubscribeAll() {
+  return supabase.removeAllChannels()
+}
