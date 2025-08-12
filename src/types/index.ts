@@ -83,6 +83,21 @@ export const createCreditSchema = z.object({
     .multipleOf(0.01, 'Amount must be a valid currency value')
 })
 
+// Real-time subscription payload types
+export interface RealtimePayload<T = Record<string, unknown>> {
+  schema: string
+  table: string
+  commit_timestamp: string
+  eventType: 'INSERT' | 'UPDATE' | 'DELETE'
+  new: T | null
+  old: T | null
+  errors: string[] | null
+}
+
+export type FineRealtimePayload = RealtimePayload<Fine>
+export type CreditRealtimePayload = RealtimePayload<Credit>
+export type UserRealtimePayload = RealtimePayload<User>
+
 // Infer types from Zod schemas
 export type CreateFineSchemaType = z.infer<typeof createFineSchema>
 export type UpdateFineSchemaType = z.infer<typeof updateFineSchema>

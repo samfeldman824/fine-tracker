@@ -1,21 +1,23 @@
 import { supabase } from './client'
-import { 
-  User, 
-  Fine, 
-  Credit, 
-  FineWithUsers, 
+import {
+  User,
+  Fine,
+  Credit,
+  FineWithUsers,
   CreditWithUser,
   CreateFineData,
   UpdateFineData,
   CreateCreditData,
   ApiResponse,
-  PaginatedResponse
+  FineRealtimePayload,
+  CreditRealtimePayload,
+  UserRealtimePayload
 } from '@/types'
 
 // Connection test utility
 export async function testConnection(): Promise<ApiResponse<boolean>> {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('users')
       .select('count')
       .limit(1)
@@ -27,9 +29,9 @@ export async function testConnection(): Promise<ApiResponse<boolean>> {
 
     return { data: true, error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Connection test failed' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Connection test failed'
     }
   }
 }
@@ -48,9 +50,9 @@ export async function getUsers(): Promise<ApiResponse<User[]>> {
 
     return { data: data || [], error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Failed to fetch users' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Failed to fetch users'
     }
   }
 }
@@ -73,9 +75,9 @@ export async function getFines(): Promise<ApiResponse<FineWithUsers[]>> {
 
     return { data: data || [], error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Failed to fetch fines' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Failed to fetch fines'
     }
   }
 }
@@ -94,9 +96,9 @@ export async function createFine(fineData: CreateFineData): Promise<ApiResponse<
 
     return { data, error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Failed to create fine' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Failed to create fine'
     }
   }
 }
@@ -116,9 +118,9 @@ export async function updateFine(id: string, fineData: UpdateFineData): Promise<
 
     return { data, error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Failed to update fine' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Failed to update fine'
     }
   }
 }
@@ -136,9 +138,9 @@ export async function deleteFine(id: string): Promise<ApiResponse<boolean>> {
 
     return { data: true, error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Failed to delete fine' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Failed to delete fine'
     }
   }
 }
@@ -160,9 +162,9 @@ export async function getCredits(): Promise<ApiResponse<CreditWithUser[]>> {
 
     return { data: data || [], error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Failed to fetch credits' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Failed to fetch credits'
     }
   }
 }
@@ -181,41 +183,44 @@ export async function createCredit(creditData: CreateCreditData): Promise<ApiRes
 
     return { data, error: null }
   } catch (err) {
-    return { 
-      data: null, 
-      error: err instanceof Error ? err.message : 'Failed to create credit' 
+    return {
+      data: null,
+      error: err instanceof Error ? err.message : 'Failed to create credit'
     }
   }
 }
 
 // Real-time subscription utilities
-export function subscribeFinesChanges(callback: (payload: any) => void) {
+export function subscribeFinesChanges(callback: (payload: FineRealtimePayload) => void) {
   return supabase
     .channel('fines-changes')
-    .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'fines' }, 
-      callback
-    )
+    .on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'fines'
+    }, (payload) => callback(payload as FineRealtimePayload))
     .subscribe()
 }
 
-export function subscribeCreditsChanges(callback: (payload: any) => void) {
+export function subscribeCreditsChanges(callback: (payload: CreditRealtimePayload) => void) {
   return supabase
     .channel('credits-changes')
-    .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'credits' }, 
-      callback
-    )
+    .on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'credits'
+    }, (payload) => callback(payload as CreditRealtimePayload))
     .subscribe()
 }
 
-export function subscribeUsersChanges(callback: (payload: any) => void) {
+export function subscribeUsersChanges(callback: (payload: UserRealtimePayload) => void) {
   return supabase
     .channel('users-changes')
-    .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'users' }, 
-      callback
-    )
+    .on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'users'
+    }, (payload) => callback(payload as UserRealtimePayload))
     .subscribe()
 }
 
