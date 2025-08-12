@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^2.54.0",
     "@tanstack/react-query": "^5.84.2",
     "@tanstack/react-query-devtools": "^5.84.2",
+    "dotenv": "^17.2.1",
     "lucide-react": "^0.539.0",
     "next": "15.4.6",
     "react": "19.1.0",
