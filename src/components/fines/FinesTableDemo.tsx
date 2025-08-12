@@ -18,7 +18,7 @@ const FinesTableDemo: React.FC = () => {
         name: 'John Doe',
         username: 'johndoe',
         password_hash: 'hash',
-        avatar_url: null,
+        avatar_url: 'https://ui-avatars.com/api/?name=John+Doe&size=150&background=f59e0b&color=fff',
         role: 'user',
         created_at: '2025-01-01T00:00:00Z'
       },
@@ -27,7 +27,7 @@ const FinesTableDemo: React.FC = () => {
         name: 'Jane Smith',
         username: 'janesmith',
         password_hash: 'hash',
-        avatar_url: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150',
+        avatar_url: 'https://ui-avatars.com/api/?name=Jane+Smith&size=150&background=10b981&color=fff',
         role: 'admin',
         created_at: '2025-01-01T00:00:00Z'
       }
@@ -45,7 +45,7 @@ const FinesTableDemo: React.FC = () => {
         name: 'Bob Wilson',
         username: 'bobwilson',
         password_hash: 'hash',
-        avatar_url: null,
+        avatar_url: 'https://ui-avatars.com/api/?name=Bob+Wilson&size=150&background=3b82f6&color=fff',
         role: 'user',
         created_at: '2025-01-01T00:00:00Z'
       },
@@ -54,7 +54,7 @@ const FinesTableDemo: React.FC = () => {
         name: 'Jane Smith',
         username: 'janesmith',
         password_hash: 'hash',
-        avatar_url: null,
+        avatar_url: 'https://ui-avatars.com/api/?name=Jane+Smith&size=150&background=10b981&color=fff',
         role: 'admin',
         created_at: '2025-01-01T00:00:00Z'
       }
@@ -72,7 +72,7 @@ const FinesTableDemo: React.FC = () => {
         name: 'Alice Johnson',
         username: 'alicejohnson',
         password_hash: 'hash',
-        avatar_url: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150',
+        avatar_url: 'https://ui-avatars.com/api/?name=Alice+Johnson&size=150&background=ec4899&color=fff',
         role: 'user',
         created_at: '2025-01-01T00:00:00Z'
       },
@@ -81,7 +81,7 @@ const FinesTableDemo: React.FC = () => {
         name: 'Mike Davis',
         username: 'mikedavis',
         password_hash: 'hash',
-        avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+        avatar_url: 'https://ui-avatars.com/api/?name=Mike+Davis&size=150&background=8b5cf6&color=fff',
         role: 'admin',
         created_at: '2025-01-01T00:00:00Z'
       }
