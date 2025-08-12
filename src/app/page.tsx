@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { DashboardHeader } from '@/components/layout'
 import { User } from '@/types'
+import FinesTableDemo from '@/components/fines/FinesTableDemo'
 
 // Mock user data for demo
 const mockUser: User = {
@@ -33,17 +34,18 @@ export default function Home() {
       />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-semibold text-amber-900 mb-4">
-            {activeTab === 'fines' ? 'Fines Dashboard' : 'Totals Dashboard'}
-          </h2>
-          <p className="text-amber-700">
-            {activeTab === 'fines' 
-              ? 'This is where the fines table and forms will be displayed.' 
-              : 'This is where the totals and summary information will be displayed.'
-            }
-          </p>
-        </div>
+        {activeTab === 'fines' ? (
+          <FinesTableDemo />
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-semibold text-amber-900 mb-4">
+              Totals Dashboard
+            </h2>
+            <p className="text-amber-700">
+              This is where the totals and summary information will be displayed.
+            </p>
+          </div>
+        )}
       </main>
     </div>
   )
