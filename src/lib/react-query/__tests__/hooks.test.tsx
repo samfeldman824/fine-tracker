@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
-import { vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useUsers, useFines, useCreateFine } from '../hooks'
 
 // Mock the database functions
@@ -32,7 +32,7 @@ function createWrapper() {
       {children}
     </QueryClientProvider>
   )
-  
+
   return TestWrapper
 }
 
@@ -44,8 +44,24 @@ describe('React Query Hooks', () => {
   describe('useUsers', () => {
     it('should fetch users successfully', async () => {
       const mockUsers = [
-        { id: '1', name: 'John Doe', username: 'john', role: 'user' as const },
-        { id: '2', name: 'Jane Smith', username: 'jane', role: 'admin' as const },
+        {
+          id: '1',
+          name: 'John Doe',
+          username: 'john',
+          password_hash: 'hash',
+          avatar_url: null,
+          role: 'user' as const,
+          created_at: '2024-01-01T00:00:00Z'
+        },
+        {
+          id: '2',
+          name: 'Jane Smith',
+          username: 'jane',
+          password_hash: 'hash',
+          avatar_url: null,
+          role: 'admin' as const,
+          created_at: '2024-01-01T00:00:00Z'
+        },
       ]
 
       vi.mocked(getUsers).mockResolvedValue({
@@ -99,8 +115,24 @@ describe('React Query Hooks', () => {
           replies: 0,
           created_at: '2025-01-01T00:00:00Z',
           updated_at: '2025-01-01T00:00:00Z',
-          offender: { id: '1', name: 'John Doe', username: 'john', role: 'user' as const },
-          proposed_by: { id: '2', name: 'Jane Smith', username: 'jane', role: 'admin' as const },
+          offender: {
+            id: '1',
+            name: 'John Doe',
+            username: 'john',
+            password_hash: 'hash',
+            avatar_url: null,
+            role: 'user' as const,
+            created_at: '2024-01-01T00:00:00Z'
+          },
+          proposed_by: {
+            id: '2',
+            name: 'Jane Smith',
+            username: 'jane',
+            password_hash: 'hash',
+            avatar_url: null,
+            role: 'admin' as const,
+            created_at: '2024-01-01T00:00:00Z'
+          },
         },
       ]
 

@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { Button } from '@/components/ui/button';

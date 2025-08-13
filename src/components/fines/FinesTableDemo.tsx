@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import FinesTable from './FinesTable';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
