@@ -61,9 +61,9 @@ export function EditFineModal({
     const handleFormSubmit = async (data: UpdateFineSchemaType) => {
         try {
             await onSave(data)
-            onClose()
+            // Don't close here - let parent handle success and close
         } catch (error) {
-            // Error handling is managed by parent component
+            // Error handling is managed by parent component through toast notifications
             console.error('Form submission error:', error)
         }
     }

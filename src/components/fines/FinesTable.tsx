@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { FineWithUsers } from '@/types';
-import { Button } from '@/components/ui/button';
+import { Button, TableSkeleton } from '@/components/ui';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Edit, Trash2, User } from 'lucide-react';
 
@@ -56,46 +56,7 @@ const FinesTable: React.FC<FinesTableProps> = ({
   if (loading) {
     return (
       <div className="w-full">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Offender</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Proposed By</TableHead>
-              <TableHead>Replies</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {[...Array(5)].map((_, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </TableCell>
-                <TableCell>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </TableCell>
-                <TableCell>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </TableCell>
-                <TableCell>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </TableCell>
-                <TableCell>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </TableCell>
-                <TableCell>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </TableCell>
-                <TableCell>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <TableSkeleton rows={5} />
       </div>
     );
   }

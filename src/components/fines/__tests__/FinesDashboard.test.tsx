@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { vi, describe, it, beforeEach, expect } from 'vitest'
 import { FinesDashboard } from '../FinesDashboard'
+import { ToastProvider } from '@/components/ui'
 import * as reactQueryHooks from '@/lib/react-query'
 
 // Mock the react-query hooks
@@ -68,7 +69,9 @@ const createWrapper = () => {
 
     const Wrapper = ({ children }: { children: React.ReactNode }) => (
         <QueryClientProvider client={queryClient}>
-            {children}
+            <ToastProvider>
+                {children}
+            </ToastProvider>
         </QueryClientProvider>
     )
 
@@ -153,10 +156,11 @@ describe('FinesDashboard', () => {
             error: null,
         })
 
-        render(<FinesDashboard />, { wrapper: createWrapper() })
+        const { container } = render(<FinesDashboard />, { wrapper: createWrapper() })
 
-        // Should show loading skeletons in the table
-        expect(screen.getAllByRole('row')).toHaveLength(6) // Header + 5 skeleton rows
+        // Should show loading skeletons instead of table rows
+        const skeletonElements = container.querySelectorAll('.animate-pulse')
+        expect(skeletonElements.length).toBeGreaterThan(0)
     })
 
     it('shows error state when there is an error', () => {

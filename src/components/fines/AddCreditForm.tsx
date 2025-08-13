@@ -32,8 +32,9 @@ export function AddCreditForm({ users, onSubmit, loading = false }: AddCreditFor
       await onSubmit(data)
       reset() // Clear form after successful submission
     } catch (error) {
-      // Error handling is managed by parent component
+      // Error handling is managed by parent component through toast notifications
       console.error('Form submission error:', error)
+      // Don't re-throw here as the parent handles the error display
     }
   }
 

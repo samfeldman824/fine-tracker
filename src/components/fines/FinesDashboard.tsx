@@ -18,6 +18,7 @@ import {
   useDeleteFine 
 } from '@/lib/react-query'
 import { FineWithUsers, CreateFineSchemaType, CreateCreditSchemaType, UpdateFineSchemaType, User } from '@/types'
+import { useToast, ErrorBoundary, FormSkeleton, CardSkeleton } from '@/components/ui'
 
 // Mock user data for demo - in a real app this would come from authentication
 const mockUser: User = {
@@ -34,6 +35,7 @@ export function FinesDashboard() {
   const [activeTab, setActiveTab] = useState<'fines' | 'totals'>('fines')
   const [editingFine, setEditingFine] = useState<FineWithUsers | null>(null)
   const [deletingFineId, setDeletingFineId] = useState<string | null>(null)
+  const { success, error: showError } = useToast()
 
   // Data queries
   const { 
@@ -66,7 +68,10 @@ export function FinesDashboard() {
         ...data,
         proposed_by_id: mockUser.id // In a real app, this would come from authenticated user
       })
+      success('Fine added successfully', 'Success')
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create fine'
+      showError(errorMessage, 'Error Adding Fine')
       console.error('Failed to create fine:', error)
       throw error
     }
@@ -75,7 +80,10 @@ export function FinesDashboard() {
   const handleCreateCredit = async (data: CreateCreditSchemaType) => {
     try {
       await createCreditMutation.mutateAsync(data)
+      success('Credit added successfully', 'Success')
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create credit'
+      showError(errorMessage, 'Error Adding Credit')
       console.error('Failed to create credit:', error)
       throw error
     }
@@ -98,7 +106,10 @@ export function FinesDashboard() {
         }
       })
       setEditingFine(null)
+      success('Fine updated successfully', 'Success')
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update fine'
+      showError(errorMessage, 'Error Updating Fine')
       console.error('Failed to update fine:', error)
       throw error
     }
@@ -114,7 +125,10 @@ export function FinesDashboard() {
     try {
       await deleteFineMutation.mutateAsync(deletingFineId)
       setDeletingFineId(null)
+      success('Fine deleted successfully', 'Success')
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete fine'
+      showError(errorMessage, 'Error Deleting Fine')
       console.error('Failed to delete fine:', error)
       setDeletingFineId(null)
       throw error
@@ -183,47 +197,73 @@ export function FinesDashboard() {
         {activeTab === 'fines' ? (
           <div className="space-y-6">
             {/* Add Fine Form */}
-            <AddFineForm
-              users={users}
-              onSubmit={handleCreateFine}
-              loading={createFineMutation.isPending}
-            />
+            <ErrorBoundary>
+              {usersLoading ? (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-6">
+                  <h3 className="text-lg font-semibold text-amber-900 mb-4">Add New Fine</h3>
+                  <FormSkeleton />
+                </div>
+              ) : (
+                <AddFineForm
+                  users={users}
+                  onSubmit={handleCreateFine}
+                  loading={createFineMutation.isPending}
+                />
+              )}
+            </ErrorBoundary>
 
             {/* Add Credit Form */}
-            <AddCreditForm
-              users={users}
-              onSubmit={handleCreateCredit}
-              loading={createCreditMutation.isPending}
-            />
+            <ErrorBoundary>
+              {usersLoading ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                  <h3 className="text-lg font-semibold text-green-900 mb-4">Add New Credit</h3>
+                  <FormSkeleton />
+                </div>
+              ) : (
+                <AddCreditForm
+                  users={users}
+                  onSubmit={handleCreateCredit}
+                  loading={createCreditMutation.isPending}
+                />
+              )}
+            </ErrorBoundary>
 
             {/* Fines Table */}
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-amber-900">
-                  Fines Overview
-                </h2>
-                <p className="text-amber-700 mt-1">
-                  Manage and track all traffic fines
-                </p>
+            <ErrorBoundary>
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-gray-200">
+                  <h2 className="text-xl font-semibold text-amber-900">
+                    Fines Overview
+                  </h2>
+                  <p className="text-amber-700 mt-1">
+                    Manage and track all traffic fines
+                  </p>
+                </div>
+                
+                <FinesTable
+                  fines={fines}
+                  loading={isLoading}
+                  onEdit={handleEditFine}
+                  onDelete={handleDeleteFine}
+                />
               </div>
-              
-              <FinesTable
-                fines={fines}
-                loading={isLoading}
-                onEdit={handleEditFine}
-                onDelete={handleDeleteFine}
-              />
-            </div>
+            </ErrorBoundary>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-semibold text-amber-900 mb-4">
-              Totals Dashboard
-            </h2>
-            <p className="text-amber-700">
-              This is where the totals and summary information will be displayed.
-            </p>
-          </div>
+          <ErrorBoundary>
+            {isLoading ? (
+              <CardSkeleton />
+            ) : (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-xl font-semibold text-amber-900 mb-4">
+                  Totals Dashboard
+                </h2>
+                <p className="text-amber-700">
+                  This is where the totals and summary information will be displayed.
+                </p>
+              </div>
+            )}
+          </ErrorBoundary>
         )}
       </main>
 

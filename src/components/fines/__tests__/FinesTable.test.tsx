@@ -172,7 +172,7 @@ describe('FinesTable', () => {
   });
 
   it('shows loading state', () => {
-    render(
+    const { container } = render(
       <FinesTable
         fines={[]}
         loading={true}
@@ -181,7 +181,8 @@ describe('FinesTable', () => {
       />
     );
 
-    const loadingElements = screen.getAllByRole('cell');
-    expect(loadingElements.length).toBeGreaterThan(0);
+    // Check for skeleton loading elements instead of table cells
+    const skeletonElements = container.querySelectorAll('.animate-pulse');
+    expect(skeletonElements.length).toBeGreaterThan(0);
   });
 });
