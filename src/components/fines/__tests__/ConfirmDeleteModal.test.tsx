@@ -1,20 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, describe, it, beforeEach } from 'vitest';
 import { ConfirmDeleteModal } from '../ConfirmDeleteModal';
 import { FineWithUsers } from '@/types';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { it } from 'zod/locales';
-import { beforeEach } from 'node:test';
-import { describe } from 'node:test';
 
 // Mock the ConfirmModal component
 vi.mock('@/components/ui/modal', () => ({
