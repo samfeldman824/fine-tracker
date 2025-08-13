@@ -28,8 +28,7 @@ export function EditFineModal({
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-        reset,
-        setValue
+        reset
     } = useForm<UpdateFineSchemaType>({
         resolver: zodResolver(updateFineSchema),
         defaultValues: {

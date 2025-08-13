@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FinesTable from './FinesTable';
+import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { FineWithUsers } from '@/types';
 
 // Demo component to show how FinesTable would be used
 const FinesTableDemo: React.FC = () => {
-  const mockFines: FineWithUsers[] = [
+  const [fines, setFines] = useState<FineWithUsers[]>([
     {
       id: '1',
       date: '2025-01-15',
@@ -86,7 +87,11 @@ const FinesTableDemo: React.FC = () => {
         created_at: '2025-01-01T00:00:00Z'
       }
     }
-  ];
+  ]);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [fineToDelete, setFineToDelete] = useState<FineWithUsers | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = (fine: FineWithUsers) => {
     console.log('Edit fine:', fine);
@@ -94,18 +99,62 @@ const FinesTableDemo: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    console.log('Delete fine:', id);
-    alert(`Delete fine with ID: ${id}`);
+    const fine = fines.find(f => f.id === id);
+    if (fine) {
+      setFineToDelete(fine);
+      setDeleteModalOpen(true);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!fineToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Remove the fine from the list
+      setFines(prevFines => prevFines.filter(f => f.id !== fineToDelete.id));
+      
+      console.log('Fine deleted successfully:', fineToDelete.id);
+      
+      // Close modal and reset state
+      setDeleteModalOpen(false);
+      setFineToDelete(null);
+    } catch (error) {
+      console.error('Error deleting fine:', error);
+      alert('Failed to delete fine. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    if (!isDeleting) {
+      setDeleteModalOpen(false);
+      setFineToDelete(null);
+    }
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <FinesTable
-        fines={mockFines}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+    <>
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <FinesTable
+          fines={fines}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </div>
+
+      <ConfirmDeleteModal
+        fine={fineToDelete}
+        isOpen={deleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        loading={isDeleting}
       />
-    </div>
+    </>
   );
 };
 
