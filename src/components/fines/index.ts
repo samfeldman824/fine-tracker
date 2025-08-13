@@ -3,3 +3,5 @@ export { AddFineForm } from './AddFineForm';
 export { AddFineFormDemo } from './AddFineFormDemo';
 export { AddCreditForm } from './AddCreditForm';
 export { AddCreditFormDemo } from './AddCreditFormDemo';
+export { EditFineModal } from './EditFineModal';
+export { EditFineModalDemo } from './EditFineModalDemo';
